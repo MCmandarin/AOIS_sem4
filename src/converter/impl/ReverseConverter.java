@@ -1,10 +1,12 @@
-public class ReverseConverter {
-    public static int binaryToInteger(String binaryNumber) {
-        return 0;
-    }
+package converter.impl;
 
-    public static String integerToBinary(int integerNumber) {
-        String binaryNumber = DirectConverter.integerToBinary(integerNumber);
+import converter.Converter;
+
+public class ReverseConverter implements Converter {
+    @Override
+    public String integerToBinary(int integerNumber) {
+        Converter converter = new DirectConverter();
+        String binaryNumber = converter.integerToBinary(integerNumber);
         char[] charArray = binaryNumber.toCharArray();
         if(charArray[0] == '0') {
             return binaryNumber;

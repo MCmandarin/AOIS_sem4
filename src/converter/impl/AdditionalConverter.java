@@ -1,6 +1,12 @@
-public class AdditionalConverter {
-    public static String integerToBinary(int integerNumber) {
-        String binaryNumber = ReverseConverter.integerToBinary(integerNumber);
+package converter.impl;
+
+import converter.Converter;
+
+public class AdditionalConverter implements Converter {
+    @Override
+    public String integerToBinary(int integerNumber) {
+        Converter converter = new ReverseConverter();
+        String binaryNumber = converter.integerToBinary(integerNumber);
         char[] charArray = binaryNumber.toCharArray();
         if (charArray[0] == '0') {
             return binaryNumber;

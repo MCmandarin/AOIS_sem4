@@ -1,5 +1,9 @@
-public class DirectConverter {
-    public static int binaryToInteger(String binaryNumber) {
+package converter.impl;
+
+import converter.Converter;
+
+public class DirectConverter implements Converter {
+    public int binaryToInteger(String binaryNumber) {
         char signSymbol = validateForBinaryNumber(binaryNumber);
         StringBuilder correctBinaryNumber = new StringBuilder(binaryNumber);
         correctBinaryNumber.setCharAt(0, '0');
@@ -16,7 +20,8 @@ public class DirectConverter {
         return integerNumber;
     }
 
-    public static String integerToBinary(int integerNumber) {
+    @Override
+    public String integerToBinary(int integerNumber) {
         StringBuilder binaryNumber = new StringBuilder();
         char signSymbol = validateForIntegerNumber(integerNumber);
         while (integerNumber != 0) {
@@ -28,14 +33,14 @@ public class DirectConverter {
         return binaryNumber.toString();
     }
 
-    private static char validateForIntegerNumber(int integerNumber) {
+    private char validateForIntegerNumber(int integerNumber) {
         if (integerNumber >= 0) {
             return '0';
         }
         return '1';
     }
 
-    private static char validateForBinaryNumber(String binaryNumber) {
+    private char validateForBinaryNumber(String binaryNumber) {
         if (binaryNumber.charAt(0) == '1') {
             return '1';
         }
