@@ -1,10 +1,17 @@
 public class Main {
     public static void main(String[] args) {
+        int numberForConvert = -12;
 
-        String a = Converter.integerToBinary( 12);
-        System.out.println(a);
+        String directBinary = DirectConverter.integerToBinary(numberForConvert);
+        System.out.println("Direct binary: " + directBinary);
 
-        int b = Converter.binaryToInteger(a);
-        System.out.println(b);
+        String reverseBinary = ReverseConverter.integerToBinary(numberForConvert);
+        System.out.println("Reverse number: " + reverseBinary);
+
+        String additionalBinary = AdditionalConverter.integerToBinary(numberForConvert);
+        System.out.println("Additional number: " + additionalBinary);
+
+        int integerBinary = DirectConverter.binaryToInteger(directBinary);
+        System.out.println("Default number: " + integerBinary);
     }
 }

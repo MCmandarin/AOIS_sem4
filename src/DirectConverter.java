@@ -1,4 +1,4 @@
-public class Converter {
+public class DirectConverter {
     public static int binaryToInteger(String binaryNumber) {
         char signSymbol = validateForBinaryNumber(binaryNumber);
         StringBuilder correctBinaryNumber = new StringBuilder(binaryNumber);
