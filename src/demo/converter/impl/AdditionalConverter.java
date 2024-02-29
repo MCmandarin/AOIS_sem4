@@ -1,14 +1,15 @@
-package converter.impl;
+package demo.converter.impl;
 
-import converter.Converter;
+import demo.converter.Converter;
 
 public class AdditionalConverter implements Converter {
+    private boolean negativeSign;
     @Override
     public String integerToBinary(int integerNumber) {
         Converter converter = new ReverseConverter();
         String binaryNumber = converter.integerToBinary(integerNumber);
         char[] charArray = binaryNumber.toCharArray();
-        if (charArray[0] == '0') {
+        if (integerNumber > 0) {
             return binaryNumber;
         }
         for (int i = charArray.length - 1; i >= 0; i--) {

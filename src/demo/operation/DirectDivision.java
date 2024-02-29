@@ -1,4 +1,4 @@
-package operation;
+package demo.operation;
 
 public class DirectDivision {
 }
