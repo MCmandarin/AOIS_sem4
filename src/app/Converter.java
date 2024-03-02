@@ -1,6 +1,8 @@
 package app;
 
 public class Converter {
+    private static final int MANTISSA = 23;
+    private static final int EXPONENT = 8;
     public int directToInteger(String binaryNumber) {
         char signSymbol = validateForBinaryNumber(binaryNumber);
         StringBuilder correctBinaryNumber = new StringBuilder(binaryNumber);
@@ -75,6 +77,22 @@ public class Converter {
         }
         return new String(charArray);
     }
+
+//    public String floatToBinary(float flotNumber) {
+//        String mainPart = integerToDirect((int) flotNumber);
+//        StringBuilder fractionalPart = new StringBuilder();
+//        float intFractionalPart = flotNumber - (int) flotNumber;
+//        for(int i = 0; i<MANTISSA; i++) {
+//            if (intFractionalPart == 1) {
+//                fractionalPart.append(1);
+//                break;
+//            }
+//            intFractionalPart *= 2;
+//            if (intFractionalPart > 1) {
+//                fractionalPart.append(1);
+//            }
+//        }
+//    }
 
 }
 
