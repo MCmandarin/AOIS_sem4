@@ -36,9 +36,6 @@ public class Main {
         System.out.println("Default number: " + floatNumber);
         String floatBinary = converter.floatToBinary(floatNumber);
         System.out.println("Float binary number: " + floatBinary);
-
-        System.out.println("#############################################");
-
         String floatingPointNumber = converter.floatToFloatingPointNumber(floatNumber);
         System.out.println("Floating point binary number: " + floatingPointNumber);
 
@@ -48,5 +45,8 @@ public class Main {
         float second = 64.44F;
         String resultFloatingPointSum = operation.floatingPointSum(first, second);
         System.out.println("Result floating point sum: " + resultFloatingPointSum);
+
+        System.out.println("#############################################");
+
     }
 }

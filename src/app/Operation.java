@@ -2,7 +2,6 @@ package app;
 
 public class Operation {
     public String additionalSum(String firstAdditional, String secondAdditional) {
-        // Дополним строки нулями слева, если их длины отличаются
         int maxLength = Math.max(firstAdditional.length(), secondAdditional.length());
         if ((firstAdditional.length() < maxLength) && firstAdditional.charAt(0) == '0') {
             firstAdditional = String.format("%" + maxLength + "s", firstAdditional).replace(' ', '0');
@@ -16,24 +15,19 @@ public class Operation {
         }
         StringBuilder result = getAdditionalSumResult(firstAdditional, secondAdditional, maxLength);
 
-        return result.toString(); // Возвращаем результат в виде строки
+        return result.toString();
     }
 
     private StringBuilder getAdditionalSumResult(String first, String second, int maxLength) {
-        StringBuilder result = new StringBuilder(); // Используем StringBuilder для эффективной работы со строками
+        StringBuilder result = new StringBuilder();
 
         int carry = 0;
 
-        // Итерация по разрядам в обратном порядке
         for (int i = maxLength - 1; i >= 0; i--) {
-            int sum = (first.charAt(i) - '0') + (second.charAt(i) - '0') + carry; // Сумма текущих разрядов и переноса
-            result.insert(0, sum % 2); // Добавление результата в начало строки
-            carry = sum / 2; // Вычисление нового значения переноса
+            int sum = (first.charAt(i) - '0') + (second.charAt(i) - '0') + carry;
+            result.insert(0, sum % 2);
+            carry = sum / 2;
         }
-
-//        if (carry == 1) {
-//            result.insert(0, '1'); // Если есть перенос после последнего разряда, добавляем его к результату
-//        }
 
         return result;
     }
@@ -61,16 +55,11 @@ public class Operation {
         int firstExponentNumber = converter.directToInteger(firstExponent);
         int secondExponentNumber = converter.directToInteger(secondExponent);
         int exponentDifference = Math.abs(firstExponentNumber - secondExponentNumber);
-        System.out.println("First exponent: " + firstExponent + " Number: " + firstExponentNumber);
-        System.out.println("Second exponent: " + secondExponent + " Number: " + secondExponentNumber);
-        System.out.println("Different between exponent: " + exponentDifference);
 
         StringBuilder firstMantissa = new StringBuilder(firstFloatingPoint.substring(9));
         firstMantissa.insert(0, '1');
         StringBuilder secondMantissa = new StringBuilder(secondFloatingPoint.substring(9));
         secondMantissa.insert(0, '1');
-        System.out.println("First mantissa: " + firstMantissa);
-        System.out.println("Second mantissa: " + secondMantissa);
         String resultExponent;
         if (firstExponentNumber > secondExponentNumber) {
             for (int i = 0; i < exponentDifference; i++) {
@@ -85,12 +74,8 @@ public class Operation {
         } else {
             resultExponent = firstExponent;
         }
-        System.out.println("New First mantissa: " + firstMantissa);
-        System.out.println("New Second mantissa: " + secondMantissa);
         Operation operation = new Operation();
         String resultMantissa = operation.getMantissaSum(firstMantissa.substring(0, 23), secondMantissa.substring(0, 23));
-        System.out.println("Result mantissa: " + resultMantissa);
-        System.out.println("Result exponent: " + resultExponent);
         if (resultMantissa.length() > 23) {
             return changeExponent(resultExponent) + resultMantissa.substring(1);
         }

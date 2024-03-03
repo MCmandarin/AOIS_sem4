@@ -103,29 +103,20 @@ public class Converter {
         StringBuilder floatBinary = new StringBuilder(floatToBinary(flotNumber));
         char sign = floatBinary.charAt(0);
         floatBinary = new StringBuilder(floatBinary.substring(1));
-        System.out.println("Sign " + sign);
-        System.out.println("Binary without sign: " + floatBinary);
-
 
         int dotIndex = floatBinary.indexOf(".");
-        System.out.println("Dot index: " + dotIndex);
         if (dotIndex != -1 && dotIndex != 0) {
             floatBinary.deleteCharAt(dotIndex);
             dotIndex = dotIndex - 1;
             floatBinary.insert(1, '.');
         }
-        System.out.println(floatBinary);
         String mantissa = String.valueOf(floatBinary.substring(2));
-        System.out.println("Raw mantissa: " + mantissa);
-        if (mantissa.length() < SIZE_MANTISSA){
+        if (mantissa.length() < SIZE_MANTISSA) {
             mantissa = mantissa + "0".repeat(SIZE_MANTISSA - mantissa.length());
         }
-        System.out.println("Full mantissa: " + mantissa);
-
 
         int intExponent = dotIndex + NUMBER_FOR_CONVERT_EXPONENT;
         String exponent = integerToDirect(intExponent).substring(1);
-        System.out.println("Exponent: " + exponent);
 
         return sign + exponent + mantissa;
     }
