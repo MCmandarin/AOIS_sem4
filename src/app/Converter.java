@@ -1,8 +1,9 @@
 package app;
 
 public class Converter {
-    private static final int MANTISSA = 23;
-    private static final int EXPONENT = 8;
+    private static final int SIZE_MANTISSA = 23;
+    private static final int NUMBER_FOR_CONVERT_EXPONENT = 127;
+
     public int directToInteger(String binaryNumber) {
         char signSymbol = validateForBinaryNumber(binaryNumber);
         StringBuilder correctBinaryNumber = new StringBuilder(binaryNumber);
@@ -78,21 +79,56 @@ public class Converter {
         return new String(charArray);
     }
 
-//    public String floatToBinary(float flotNumber) {
-//        String mainPart = integerToDirect((int) flotNumber);
-//        StringBuilder fractionalPart = new StringBuilder();
-//        float intFractionalPart = flotNumber - (int) flotNumber;
-//        for(int i = 0; i<MANTISSA; i++) {
-//            if (intFractionalPart == 1) {
-//                fractionalPart.append(1);
-//                break;
-//            }
-//            intFractionalPart *= 2;
-//            if (intFractionalPart > 1) {
-//                fractionalPart.append(1);
-//            }
-//        }
-//    }
+    public String floatToBinary(float flotNumber) {
+        String mainPart = integerToDirect((int) flotNumber);
+        StringBuilder fractionalPart = new StringBuilder();
+        float floatFractionalPart = Math.abs(flotNumber - (int) flotNumber);
+        for (int i = 0; i < SIZE_MANTISSA; i++) {
+            if (floatFractionalPart == 1) {
+                fractionalPart.append(1);
+                break;
+            }
+            floatFractionalPart *= 2;
+            if (floatFractionalPart > 1) {
+                fractionalPart.append(1);
+                floatFractionalPart -= 1;
+            } else if (floatFractionalPart < 1) {
+                fractionalPart.append(0);
+            }
+        }
+        return mainPart + '.' + fractionalPart;
+    }
+
+    public String floatToFloatingPointNumber(float flotNumber) {
+        StringBuilder floatBinary = new StringBuilder(floatToBinary(flotNumber));
+        char sign = floatBinary.charAt(0);
+        floatBinary = new StringBuilder(floatBinary.substring(1));
+        System.out.println("Sign " + sign);
+        System.out.println("Binary without sign: " + floatBinary);
+
+
+        int dotIndex = floatBinary.indexOf(".");
+        System.out.println("Dot index: " + dotIndex);
+        if (dotIndex != -1 && dotIndex != 0) {
+            floatBinary.deleteCharAt(dotIndex);
+            dotIndex = dotIndex - 1;
+            floatBinary.insert(1, '.');
+        }
+        System.out.println(floatBinary);
+        String mantissa = String.valueOf(floatBinary.substring(2));
+        System.out.println("Raw mantissa: " + mantissa);
+        if (mantissa.length() < SIZE_MANTISSA){
+            mantissa = mantissa + "0".repeat(SIZE_MANTISSA - mantissa.length());
+        }
+        System.out.println("Full mantissa: " + mantissa);
+
+
+        int intExponent = dotIndex + NUMBER_FOR_CONVERT_EXPONENT;
+        String exponent = integerToDirect(intExponent).substring(1);
+        System.out.println("Exponent: " + exponent);
+
+        return sign + exponent + mantissa;
+    }
 
 }
 

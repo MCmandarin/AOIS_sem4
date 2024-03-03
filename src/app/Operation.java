@@ -31,12 +31,16 @@ public class Operation {
             carry = sum / 2; // Вычисление нового значения переноса
         }
 
+//        if (carry == 1) {
+//            result.insert(0, '1'); // Если есть перенос после последнего разряда, добавляем его к результату
+//        }
+
         return result;
     }
 
-    public String getFinalAdditionalSumResult (String firstAdditional, String secondAdditional, String sumResult) {
+    public String getFinalAdditionalSumResult(String firstAdditional, String secondAdditional, String sumResult) {
         StringBuilder stringBuilder = new StringBuilder(sumResult);
-        if(firstAdditional.charAt(0) == '1' && secondAdditional.charAt(0) == '1') {
+        if (firstAdditional.charAt(0) == '1' && secondAdditional.charAt(0) == '1') {
             stringBuilder.insert(0, '1');
         }
         Converter converter = new Converter();
@@ -44,5 +48,79 @@ public class Operation {
             return converter.directToAdditional(stringBuilder.toString());
         }
         return sumResult;
+    }
+
+    public String floatingPointSum(float first, float second) {
+        Converter converter = new Converter();
+        String firstFloatingPoint = converter.floatToFloatingPointNumber(first);
+        String secondFloatingPoint = converter.floatToFloatingPointNumber(second);
+        System.out.println("First number: " + firstFloatingPoint);
+        System.out.println("Second number: " + secondFloatingPoint);
+        String firstExponent = firstFloatingPoint.substring(0, 9);
+        String secondExponent = secondFloatingPoint.substring(0, 9);
+        int firstExponentNumber = converter.directToInteger(firstExponent);
+        int secondExponentNumber = converter.directToInteger(secondExponent);
+        int exponentDifference = Math.abs(firstExponentNumber - secondExponentNumber);
+        System.out.println("First exponent: " + firstExponent + " Number: " + firstExponentNumber);
+        System.out.println("Second exponent: " + secondExponent + " Number: " + secondExponentNumber);
+        System.out.println("Different between exponent: " + exponentDifference);
+
+        StringBuilder firstMantissa = new StringBuilder(firstFloatingPoint.substring(9));
+        firstMantissa.insert(0, '1');
+        StringBuilder secondMantissa = new StringBuilder(secondFloatingPoint.substring(9));
+        secondMantissa.insert(0, '1');
+        System.out.println("First mantissa: " + firstMantissa);
+        System.out.println("Second mantissa: " + secondMantissa);
+        String resultExponent;
+        if (firstExponentNumber > secondExponentNumber) {
+            for (int i = 0; i < exponentDifference; i++) {
+                secondMantissa.insert(0, '0');
+            }
+            resultExponent = firstExponent;
+        } else if (secondExponentNumber > firstExponentNumber) {
+            for (int i = 0; i < exponentDifference; i++) {
+                firstMantissa.insert(0, '0');
+            }
+            resultExponent = secondExponent;
+        } else {
+            resultExponent = firstExponent;
+        }
+        System.out.println("New First mantissa: " + firstMantissa);
+        System.out.println("New Second mantissa: " + secondMantissa);
+        Operation operation = new Operation();
+        String resultMantissa = operation.getMantissaSum(firstMantissa.substring(0, 23), secondMantissa.substring(0, 23));
+        System.out.println("Result mantissa: " + resultMantissa);
+        System.out.println("Result exponent: " + resultExponent);
+        if (resultMantissa.length() > 23) {
+            return changeExponent(resultExponent) + resultMantissa.substring(1);
+        }
+        return resultExponent + resultMantissa.substring(1, 23) + '0';
+    }
+
+    private String changeExponent(String exponent) {
+        char[] charArray = exponent.toCharArray();
+        for (int i = charArray.length - 1; i >= 0; i--) {
+            if (charArray[i] == '1') {
+                charArray[i] = '0';
+                continue;
+            }
+            charArray[i] = '1';
+            break;
+        }
+        return new String(charArray);
+    }
+
+    private String getMantissaSum(String first, String second) {
+        StringBuilder result = new StringBuilder();
+        int carry = 0;
+        for (int i = first.length() - 1; i >= 0; i--) {
+            int sum = (first.charAt(i) - '0') + (second.charAt(i) - '0') + carry;
+            result.insert(0, sum % 2);
+            carry = sum / 2;
+        }
+        if (carry == 1) {
+            result.insert(0, '1');
+        }
+        return result.toString();
     }
 }
