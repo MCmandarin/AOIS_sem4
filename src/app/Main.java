@@ -41,12 +41,18 @@ public class Main {
 
         System.out.println("#############################################");
 
-        float first = 10.70F;
-        float second = 64.44F;
+        float first = 2.70F;
+        float second = 5.44F;
         String resultFloatingPointSum = operation.floatingPointSum(first, second);
         System.out.println("Result floating point sum: " + resultFloatingPointSum);
 
         System.out.println("#############################################");
 
+        int firstNum = 4;
+        int secondNum = 3;
+        String resultMultiplication = operation.directMultiplication(firstNum, secondNum);
+        System.out.println("Result multiplication: " + resultMultiplication);
+
+        System.out.println("#############################################");
     }
 }

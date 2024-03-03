@@ -75,7 +75,7 @@ public class Operation {
             resultExponent = firstExponent;
         }
         Operation operation = new Operation();
-        String resultMantissa = operation.getMantissaSum(firstMantissa.substring(0, 23), secondMantissa.substring(0, 23));
+        StringBuilder resultMantissa = operation.getSum(firstMantissa.substring(0, 23), secondMantissa.substring(0, 23));
         if (resultMantissa.length() > 23) {
             return changeExponent(resultExponent) + resultMantissa.substring(1);
         }
@@ -95,7 +95,7 @@ public class Operation {
         return new String(charArray);
     }
 
-    private String getMantissaSum(String first, String second) {
+    private StringBuilder getSum(String first, String second) {
         StringBuilder result = new StringBuilder();
         int carry = 0;
         for (int i = first.length() - 1; i >= 0; i--) {
@@ -106,6 +106,34 @@ public class Operation {
         if (carry == 1) {
             result.insert(0, '1');
         }
-        return result.toString();
+        return result;
+    }
+
+    public String directMultiplication(int first, int second) {
+        Converter converter = new Converter();
+        Operation operation = new Operation();
+        String firstBinary = converter.integerToDirect(first).substring(1);
+        String secondBinary = converter.integerToDirect(second).substring(1);
+        StringBuilder resultBinary = new StringBuilder();
+        resultBinary.append("0".repeat(firstBinary.length()));
+        for (int i = secondBinary.length() - 1; i >= 0; i--) {
+            if (secondBinary.charAt(i) == '1') {
+                resultBinary = operation.getSum(firstBinary, resultBinary.toString());
+                firstBinary += '0';
+                while (resultBinary.length() < firstBinary.length()) {
+                    resultBinary.insert(0, '0');
+                }
+                continue;
+            }
+            firstBinary += '0';
+            resultBinary.insert(0, '0');
+        }
+        if ((first < 0 && second < 0) || (first > 0 && second > 0)) {
+            resultBinary.insert(0, '0');
+        } else if (first < 0 || second < 0) {
+            resultBinary.insert(0, '1');
+        }
+
+        return resultBinary.toString();
     }
 }
