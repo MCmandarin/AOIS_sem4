@@ -136,4 +136,122 @@ public class Operation {
 
         return resultBinary.toString();
     }
+
+//    public void directDivision(int first, int second) {
+//        Converter converter = new Converter();
+//        StringBuilder firstBinary = new StringBuilder(converter.integerToDirect(first).substring(1));
+//        String secondBinary = converter.integerToDirect(second).substring(1);
+//
+//        String subtractResult;
+//        int end = 1;
+//        StringBuilder divisionResult = new StringBuilder();
+//        while (true) {
+//            subtractResult = subtractBinary(firstBinary.substring(0, end), secondBinary);
+//
+//            if (subtractResult.charAt(0) == '1') {
+//                end++;
+//                divisionResult.append(0);
+//                if (end >= firstBinary.length()) {
+//                    break;
+//                }
+//                continue;
+//            }
+//
+//            firstBinary.delete(0, end);
+//            firstBinary.insert(0, subtractResult.substring(1));
+//            divisionResult.append(1);
+//
+//            if (firstBinary.length() == 1) {
+//                break;
+//            }
+//            end = 2;
+//        }
+//        System.out.println(divisionResult);
+//    }
+//
+//    public String subtractBinary(String binary1, String binary2) {
+//        int maxLength = Math.max(binary1.length(), binary2.length());
+//        if (binary1.length() < maxLength) {
+//            binary1 = String.format("%" + maxLength + "s", binary1).replace(' ', '0');
+//        }
+//        if (binary2.length() < maxLength) {
+//            binary2 = String.format("%" + maxLength + "s", binary2).replace(' ', '0');
+//        }
+//
+//        int borrow = 0;
+//        StringBuilder result = new StringBuilder();
+//
+//        for (int i = maxLength - 1; i >= 0; i--) {
+//            int bit1 = Character.getNumericValue(binary1.charAt(i));
+//            int bit2 = Character.getNumericValue(binary2.charAt(i));
+//
+//            int difference = bit1 - bit2 - borrow;
+//
+//            if (difference < 0) {
+//                difference += 2;
+//                borrow = 1;
+//            } else {
+//                borrow = 0;
+//            }
+//
+//            result.insert(0, difference);
+//        }
+//
+//        return result.toString();
+//    }
+
+
+
+
+
+
+
+
+//ПРОХОРА//////////////////////////////////////////////////////////////////////
+//    public String divide(FixedPointerBinaryNum divisor) {
+//        char sign = getDivideSignBit(this, divisor);
+//
+//        String unsignedDividendIntPart = this.fixedPointBinaryNumValue.substring(1, this.fixedPointBinaryNumValue.indexOf('.'))
+//                + this.fixedPointBinaryNumValue.substring(this.fixedPointBinaryNumValue.indexOf('.') + 1);
+//
+//        String unsignedDivisorIntPart = divisor.fixedPointBinaryNumValue.substring(1, divisor.fixedPointBinaryNumValue.indexOf('.'))
+//                + divisor.fixedPointBinaryNumValue.substring(divisor.fixedPointBinaryNumValue.indexOf('.') + 1);
+//
+//
+//
+//        fixedPointBinaryNumValue = sign+performDivision(unsignedDividendIntPart, unsignedDivisorIntPart);
+//        updateValues(fixedPointBinaryNumValue);
+//        return fixedPointBinaryNumValue;
+//    }
+//
+//    private String performDivision(String unsignedDividendIntPart, String unsignedDivisorIntPart){
+//        StringBuilder result = new StringBuilder();
+//        String remainder = "0";
+//
+//        for (int i = 0; i < unsignedDividendIntPart.length(); i++) {
+//            remainder = remainder+unsignedDividendIntPart.charAt(i);
+//            if (isGreaterOrEqual(remainder, unsignedDivisorIntPart)){
+//                result.append("1");
+//                remainder = subtractBinary(remainder, unsignedDivisorIntPart);
+//            }else {
+//                result.append("0");
+//            }
+//        }
+//
+//        result.append(".");
+//
+//        for (int i = 0; i < 5; i++) {
+//            remainder = remainder+"0";
+//            if (isGreaterOrEqual(remainder, unsignedDivisorIntPart)){
+//                result.append("1");
+//                remainder = subtractBinary(remainder, unsignedDivisorIntPart);
+//            }else {
+//                result.append("0");
+//            }
+//        }
+//
+//        return removeLeadingZeroes(result.toString());
+//    }
+
+
 }

@@ -54,5 +54,29 @@ public class Main {
         System.out.println("Result multiplication: " + resultMultiplication);
 
         System.out.println("#############################################");
+
+//        int subtractInt1 = 3;
+//        int subtractInt2 = 2;
+//        String subtractBinary1 = converter.integerToDirect(subtractInt1);
+//        String subtractBinary2 = converter.integerToDirect(subtractInt2);
+//        String subtractResult = operation.subtractBinary(subtractBinary1, subtractBinary2);
+//        System.out.println("Subtract result: " + subtractResult);
+//
+//        System.out.println("#############################################");
+//        String str = "01100";
+//        System.out.println("Str: " + str.substring(0, 5));
+//        StringBuilder stringBuilder = new StringBuilder("10101");
+//        stringBuilder.delete(0, 2);
+//        System.out.println("Str builder: " + stringBuilder);
+
+//        int firstForDivision = 40;
+//        int secondForDivision = 2;
+//        operation.directDivision(firstForDivision, secondForDivision);
+
+        int num_1 = 23;  // Делимое
+        int num_2 = 5;   // Делитель
+
+        String result = operation.divisionBinary(num_1, num_2);
+        System.out.println("Результат деления в двоичной системе: " + result);
     }
 }
