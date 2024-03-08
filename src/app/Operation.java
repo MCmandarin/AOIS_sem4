@@ -1,7 +1,13 @@
 package app;
 
 public class Operation {
-    public String additionalSum(String firstAdditional, String secondAdditional) {
+    public String additionalSum(int first, int second) {
+        Converter converter = new Converter();
+        String firstDirect = converter.integerToDirect(first);
+        String secondDirect = converter.integerToDirect(second);
+        String firstAdditional = converter.directToAdditional(firstDirect);
+        String secondAdditional = converter.directToAdditional(secondDirect);
+
         int maxLength = Math.max(firstAdditional.length(), secondAdditional.length());
         if ((firstAdditional.length() < maxLength) && firstAdditional.charAt(0) == '0') {
             firstAdditional = String.format("%" + maxLength + "s", firstAdditional).replace(' ', '0');
@@ -13,12 +19,15 @@ public class Operation {
         } else if ((secondAdditional.length() < maxLength) && secondAdditional.charAt(0) == '1') {
             secondAdditional = String.format("%" + maxLength + "s", secondAdditional).replace(' ', '1');
         }
-        StringBuilder result = getAdditionalSumResult(firstAdditional, secondAdditional, maxLength);
 
-        return result.toString();
+        String sumResult = getAdditionalSumResult(firstAdditional, secondAdditional, maxLength);
+        if (first > 0 && second > 0) {
+            return '0' + sumResult;
+        }
+        return getFinalAdditionalSumResult(firstAdditional, secondAdditional, sumResult);
     }
 
-    private StringBuilder getAdditionalSumResult(String first, String second, int maxLength) {
+    private String getAdditionalSumResult(String first, String second, int maxLength) {
         StringBuilder result = new StringBuilder();
 
         int carry = 0;
@@ -29,10 +38,10 @@ public class Operation {
             carry = sum / 2;
         }
 
-        return result;
+        return result.toString();
     }
 
-    public String getFinalAdditionalSumResult(String firstAdditional, String secondAdditional, String sumResult) {
+    private String getFinalAdditionalSumResult(String firstAdditional, String secondAdditional, String sumResult) {
         StringBuilder stringBuilder = new StringBuilder(sumResult);
         if (firstAdditional.charAt(0) == '1' && secondAdditional.charAt(0) == '1') {
             stringBuilder.insert(0, '1');
@@ -133,125 +142,100 @@ public class Operation {
         } else if (first < 0 || second < 0) {
             resultBinary.insert(0, '1');
         }
-
         return resultBinary.toString();
     }
 
-//    public void directDivision(int first, int second) {
-//        Converter converter = new Converter();
-//        StringBuilder firstBinary = new StringBuilder(converter.integerToDirect(first).substring(1));
-//        String secondBinary = converter.integerToDirect(second).substring(1);
-//
-//        String subtractResult;
-//        int end = 1;
-//        StringBuilder divisionResult = new StringBuilder();
-//        while (true) {
-//            subtractResult = subtractBinary(firstBinary.substring(0, end), secondBinary);
-//
-//            if (subtractResult.charAt(0) == '1') {
-//                end++;
-//                divisionResult.append(0);
-//                if (end >= firstBinary.length()) {
-//                    break;
-//                }
-//                continue;
-//            }
-//
-//            firstBinary.delete(0, end);
-//            firstBinary.insert(0, subtractResult.substring(1));
-//            divisionResult.append(1);
-//
-//            if (firstBinary.length() == 1) {
-//                break;
-//            }
-//            end = 2;
-//        }
-//        System.out.println(divisionResult);
-//    }
-//
-//    public String subtractBinary(String binary1, String binary2) {
-//        int maxLength = Math.max(binary1.length(), binary2.length());
-//        if (binary1.length() < maxLength) {
-//            binary1 = String.format("%" + maxLength + "s", binary1).replace(' ', '0');
-//        }
-//        if (binary2.length() < maxLength) {
-//            binary2 = String.format("%" + maxLength + "s", binary2).replace(' ', '0');
-//        }
-//
-//        int borrow = 0;
-//        StringBuilder result = new StringBuilder();
-//
-//        for (int i = maxLength - 1; i >= 0; i--) {
-//            int bit1 = Character.getNumericValue(binary1.charAt(i));
-//            int bit2 = Character.getNumericValue(binary2.charAt(i));
-//
-//            int difference = bit1 - bit2 - borrow;
-//
-//            if (difference < 0) {
-//                difference += 2;
-//                borrow = 1;
-//            } else {
-//                borrow = 0;
-//            }
-//
-//            result.insert(0, difference);
-//        }
-//
-//        return result.toString();
-//    }
+    public String subtractBinary(String binary1, String binary2) {
+        int maxLength = Math.max(binary1.length(), binary2.length());
+        if (binary1.length() < maxLength) {
+            binary1 = String.format("%" + maxLength + "s", binary1).replace(' ', '0');
+        }
+        if (binary2.length() < maxLength) {
+            binary2 = String.format("%" + maxLength + "s", binary2).replace(' ', '0');
+        }
+        int borrow = 0;
+        StringBuilder result = new StringBuilder();
 
+        for (int i = maxLength - 1; i >= 0; i--) {
+            int bit1 = Character.getNumericValue(binary1.charAt(i));
+            int bit2 = Character.getNumericValue(binary2.charAt(i));
 
+            int difference = bit1 - bit2 - borrow;
+            if (difference < 0) {
+                difference += 2;
+                borrow = 1;
+            } else {
+                borrow = 0;
+            }
+            result.insert(0, difference);
+        }
+        return result.toString();
+    }
 
+    public String divide(int dividend, int divisor) {
+        char sign;
+        if (dividend < 0 && divisor < 0) {
+            sign = '0';
+        } else if (dividend < 0 || divisor < 0) {
+            sign = '1';
+        } else {
+            sign = '0';
+        }
 
+        Converter converter = new Converter();
+        String dividendBinary = converter.integerToDirect(dividend).substring(1);
+        String divisorBinary = converter.integerToDirect(divisor).substring(1);
+        return sign + division(dividendBinary, divisorBinary);
+    }
 
+    private String division(String dividend, String divisor) {
+        StringBuilder result = new StringBuilder();
+        String remainder = "0";
 
+        for (int i = 0; i < dividend.length(); i++) {
+            remainder = remainder + dividend.charAt(i);
+            if (equalOrGreater(remainder, divisor)) {
+                result.append("1");
+                remainder = subtractBinary(remainder, divisor);
+            } else {
+                result.append("0");
+            }
+        }
+        result.append(".");
 
+        for (int i = 0; i < 5; i++) {
+            remainder = remainder + "0";
+            if (equalOrGreater(remainder, divisor)) {
+                result.append("1");
+                remainder = subtractBinary(remainder, divisor);
+            } else {
+                result.append("0");
+            }
+        }
+        return result.toString();
+    }
 
-//ПРОХОРА//////////////////////////////////////////////////////////////////////
-//    public String divide(FixedPointerBinaryNum divisor) {
-//        char sign = getDivideSignBit(this, divisor);
-//
-//        String unsignedDividendIntPart = this.fixedPointBinaryNumValue.substring(1, this.fixedPointBinaryNumValue.indexOf('.'))
-//                + this.fixedPointBinaryNumValue.substring(this.fixedPointBinaryNumValue.indexOf('.') + 1);
-//
-//        String unsignedDivisorIntPart = divisor.fixedPointBinaryNumValue.substring(1, divisor.fixedPointBinaryNumValue.indexOf('.'))
-//                + divisor.fixedPointBinaryNumValue.substring(divisor.fixedPointBinaryNumValue.indexOf('.') + 1);
-//
-//
-//
-//        fixedPointBinaryNumValue = sign+performDivision(unsignedDividendIntPart, unsignedDivisorIntPart);
-//        updateValues(fixedPointBinaryNumValue);
-//        return fixedPointBinaryNumValue;
-//    }
-//
-//    private String performDivision(String unsignedDividendIntPart, String unsignedDivisorIntPart){
-//        StringBuilder result = new StringBuilder();
-//        String remainder = "0";
-//
-//        for (int i = 0; i < unsignedDividendIntPart.length(); i++) {
-//            remainder = remainder+unsignedDividendIntPart.charAt(i);
-//            if (isGreaterOrEqual(remainder, unsignedDivisorIntPart)){
-//                result.append("1");
-//                remainder = subtractBinary(remainder, unsignedDivisorIntPart);
-//            }else {
-//                result.append("0");
-//            }
-//        }
-//
-//        result.append(".");
-//
-//        for (int i = 0; i < 5; i++) {
-//            remainder = remainder+"0";
-//            if (isGreaterOrEqual(remainder, unsignedDivisorIntPart)){
-//                result.append("1");
-//                remainder = subtractBinary(remainder, unsignedDivisorIntPart);
-//            }else {
-//                result.append("0");
-//            }
-//        }
-//
-//        return removeLeadingZeroes(result.toString());
-//    }
+    private boolean equalOrGreater(String first, String second) {
+        int maxLength = Math.max(first.length(), second.length());
+        if (first.length() < maxLength) {
+            first = String.format("%" + maxLength + "s", first).replace(' ', '0');
+        }
+        if (second.length() < maxLength) {
+            second = String.format("%" + maxLength + "s", second).replace(' ', '0');
+        }
 
+        if (first.length() == second.length()) {
+            for (int i = 0; i < first.length(); i++) {
+                int bit1 = Character.getNumericValue(first.charAt(i));
+                int bit2 = Character.getNumericValue(second.charAt(i));
 
+                if (bit1 > bit2) {
+                    return true;
+                } else if (bit1 < bit2) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

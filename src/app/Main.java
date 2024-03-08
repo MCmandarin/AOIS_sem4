@@ -18,17 +18,11 @@ public class Main {
 
         System.out.println("#############################################");
 
-        String firstDirect = converter.integerToDirect(3);
-        String secondDirect = converter.integerToDirect(-14);
+        int firstAdditionalSum = 155;
+        int secondAdditionalSum = 14;
         Operation operation = new Operation();
-        System.out.println("BFirst: " + firstDirect + " BSecond: " + secondDirect);
-        String firstAdditional = converter.directToAdditional(firstDirect);
-        String secondAdditional = converter.directToAdditional(secondDirect);
-        System.out.println("AFirst: " + firstAdditional + " ASecond: " + secondAdditional);
-        String sumResult = operation.additionalSum(firstAdditional, secondAdditional);
-        System.out.println("Sum Result: " + sumResult);
-        String finalSumResult = operation.getFinalAdditionalSumResult(firstAdditional, secondAdditional, sumResult);
-        System.out.println("Final sum result: " + finalSumResult + " --> " + converter.directToInteger(finalSumResult));
+        String sumResult = operation.additionalSum(firstAdditionalSum, secondAdditionalSum);
+        System.out.println("Final sum result: " + sumResult + " --> " + converter.directToInteger(sumResult));
 
         System.out.println("#############################################");
 
@@ -41,42 +35,32 @@ public class Main {
 
         System.out.println("#############################################");
 
-        float first = 2.70F;
-        float second = 5.44F;
+        float first = 128.70F;
+        float second = 129.44F;
         String resultFloatingPointSum = operation.floatingPointSum(first, second);
-        System.out.println("Result floating point sum: " + resultFloatingPointSum);
+        System.out.println("Result floating point sum: " + resultFloatingPointSum + " ---> " + (first + second));
 
         System.out.println("#############################################");
 
-        int firstNum = 4;
-        int secondNum = 3;
+        int firstNum = 14;
+        int secondNum = 15;
         String resultMultiplication = operation.directMultiplication(firstNum, secondNum);
-        System.out.println("Result multiplication: " + resultMultiplication);
+        System.out.println("Result multiplication: " + resultMultiplication + " ---> " + converter.directToInteger(resultMultiplication));
 
         System.out.println("#############################################");
 
-//        int subtractInt1 = 3;
-//        int subtractInt2 = 2;
-//        String subtractBinary1 = converter.integerToDirect(subtractInt1);
-//        String subtractBinary2 = converter.integerToDirect(subtractInt2);
-//        String subtractResult = operation.subtractBinary(subtractBinary1, subtractBinary2);
-//        System.out.println("Subtract result: " + subtractResult);
-//
-//        System.out.println("#############################################");
-//        String str = "01100";
-//        System.out.println("Str: " + str.substring(0, 5));
-//        StringBuilder stringBuilder = new StringBuilder("10101");
-//        stringBuilder.delete(0, 2);
-//        System.out.println("Str builder: " + stringBuilder);
+        int subtractInt1 = 3;
+        int subtractInt2 = 2;
+        String subtractBinary1 = converter.integerToDirect(subtractInt1);
+        String subtractBinary2 = converter.integerToDirect(subtractInt2);
+        String subtractResult = operation.subtractBinary(subtractBinary1, subtractBinary2);
+        System.out.println("Subtract result: " + subtractResult);
 
-//        int firstForDivision = 40;
-//        int secondForDivision = 2;
-//        operation.directDivision(firstForDivision, secondForDivision);
+        System.out.println("#############################################");
 
-        int num_1 = 23;  // Делимое
-        int num_2 = 5;   // Делитель
-
-        String result = operation.divisionBinary(num_1, num_2);
-        System.out.println("Результат деления в двоичной системе: " + result);
+        int dividend = 25;
+        int divisor = 15;
+        String divideResult = operation.divide(dividend, divisor);
+        System.out.println("Divided result: " + divideResult + " ---> " + (float) dividend / divisor);
     }
 }
