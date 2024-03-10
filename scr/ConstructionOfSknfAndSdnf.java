@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-public class ReversePolishNotation {
+public class ConstructionOfSknfAndSdnf {
     public static void main(String[] args) {
-        String expression = "((((P & (!Q)) - R) ~ P) | (P & Q))";
-        String expression2 = "(A | B) & !C";
+        String expression3 = "((P - (Q & R)) ~ ((P & (!Q)) - (!R)))";
+        String expression2 = "((((P & (!Q)) - R) ~ P) | (P & Q))";
+        String expression = "(A | B) & !C";
         String rpn = convertToRPN(expression);
         System.out.println("Обратная польская запись: " + rpn);
         System.out.println("``````````````````````````````````");
