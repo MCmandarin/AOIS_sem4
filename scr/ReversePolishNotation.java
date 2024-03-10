@@ -10,10 +10,21 @@ public class ReversePolishNotation {
         String expression = "(A | B) & !C";
         String rpn = convertToRPN(expression);
         System.out.println("Обратная польская запись: " + rpn);
+        System.out.println("``````````````````````````````````");
 
         // Построение таблицы истинности
         System.out.println("Таблица истинности:");
-        buildTruthTable(rpn);
+//        buildTruthTable(rpn);
+        Map<Map<Character, Boolean>, Boolean> truthTable = buildTruthTable(rpn);
+        for (Map.Entry<Map<Character, Boolean>, Boolean> entry : truthTable.entrySet()) {
+            System.out.println(entry.getKey() + " => " + entry.getValue());
+        }
+        System.out.println("``````````````````````````````````");
+
+        // Построение СДНФ и СКНФ
+        System.out.println("СДНФ: " + buildSDNF(truthTable));
+        System.out.println("СКНФ: " + buildSKNF(truthTable));
+        System.out.println("``````````````````````````````````");
     }
 
     public static String convertToRPN(String expression) {
@@ -59,7 +70,9 @@ public class ReversePolishNotation {
         };
     }
 
-    public static void buildTruthTable(String expression) {
+    public static Map<Map<Character, Boolean>, Boolean> buildTruthTable(String expression) {
+        Map<Map<Character, Boolean>, Boolean> truthTable = new HashMap<>();
+
         List<Character> variables = extractVariables(expression);
         int n = variables.size();
         int combinations = 1 << n; // 2 в степени n
@@ -72,9 +85,12 @@ public class ReversePolishNotation {
                 variableValues.put(variable, value);
             }
             boolean result = evaluateExpression(expression, variableValues);
-            System.out.print(variableValues + " => " + result);
-            System.out.println();
+//            System.out.print(variableValues + " => " + result);
+//            System.out.println();
+            truthTable.put(variableValues, result);
         }
+
+        return truthTable;
     }
 
     public static boolean evaluateExpression(String expression, Map<Character, Boolean> variableValues) {
@@ -115,5 +131,47 @@ public class ReversePolishNotation {
             case '-' -> !operand1 | operand2;
             default -> false;
         };
+    }
+
+    public static String buildSDNF(Map<Map<Character, Boolean>, Boolean> truthTable) {
+        List<String> terms = new ArrayList<>();
+        for (Map.Entry<Map<Character, Boolean>, Boolean> entry : truthTable.entrySet()) {
+            if (entry.getValue()) {
+                StringBuilder term = new StringBuilder();
+                Map<Character, Boolean> variables = entry.getKey();
+                for (Map.Entry<Character, Boolean> varEntry : variables.entrySet()) {
+                    char variable = varEntry.getKey();
+                    boolean value = varEntry.getValue();
+                    if (value) {
+                        term.append(variable);
+                    } else {
+                        term.append("!").append(variable);
+                    }
+                }
+                terms.add(term.toString());
+            }
+        }
+        return String.join(" | ", terms);
+    }
+
+    public static String buildSKNF(Map<Map<Character, Boolean>, Boolean> truthTable) {
+        List<String> terms = new ArrayList<>();
+        for (Map.Entry<Map<Character, Boolean>, Boolean> entry : truthTable.entrySet()) {
+            if (!entry.getValue()) {
+                StringBuilder term = new StringBuilder();
+                Map<Character, Boolean> variables = entry.getKey();
+                for (Map.Entry<Character, Boolean> varEntry : variables.entrySet()) {
+                    char variable = varEntry.getKey();
+                    boolean value = varEntry.getValue();
+                    if (value) {
+                        term.append("!").append(variable);
+                    } else {
+                        term.append(variable);
+                    }
+                }
+                terms.add(term.toString());
+            }
+        }
+        return String.join(" & ", terms);
     }
 }
