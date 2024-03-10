@@ -13,16 +13,13 @@ public class ReversePolishNotation {
         System.out.println("Обратная польская запись: " + rpn);
         System.out.println("``````````````````````````````````");
 
-        // Построение таблицы истинности
         System.out.println("Таблица истинности:");
-//        buildTruthTable(rpn);
         Map<Map<Character, Boolean>, Boolean> truthTable = buildTruthTable(rpn);
         for (Map.Entry<Map<Character, Boolean>, Boolean> entry : truthTable.entrySet()) {
             System.out.println(entry.getKey() + " => " + entry.getValue());
         }
         System.out.println("``````````````````````````````````");
 
-        // Построение СДНФ и СКНФ
         System.out.println("СДНФ: " + buildSDNF(truthTable));
         System.out.println("СКНФ: " + buildSKNF(truthTable));
         System.out.println("``````````````````````````````````");
@@ -31,7 +28,6 @@ public class ReversePolishNotation {
         System.out.println("Числовая формула СКНФ: " + numericFormSKNF(truthTable));
         System.out.println("``````````````````````````````````");
 
-        // Вывод битовых масок
         System.out.println("Индексная форма:");
         List<String> bitMasks = buildIndexForm(truthTable);
         StringBuilder binaryString = new StringBuilder();
@@ -55,7 +51,7 @@ public class ReversePolishNotation {
                 while (!stack.isEmpty() && stack.peek() != '(') {
                     result.append(stack.pop());
                 }
-                stack.pop(); // Убираем '(' из стека
+                stack.pop();
             } else if (isOperator(ch)) {
                 while (!stack.isEmpty() && precedence(ch) <= precedence(stack.peek())) {
                     result.append(stack.pop());
@@ -86,11 +82,11 @@ public class ReversePolishNotation {
     }
 
     public static Map<Map<Character, Boolean>, Boolean> buildTruthTable(String expression) {
-        Map<Map<Character, Boolean>, Boolean> truthTable = new LinkedHashMap<>(); // LinkedHashMap для сохранения порядка
+        Map<Map<Character, Boolean>, Boolean> truthTable = new LinkedHashMap<>();
 
         List<Character> variables = extractVariables(expression);
         int n = variables.size();
-        int combinations = 1 << n; // 2 в степени n
+        int combinations = 1 << n;
 
         for (int i = 0; i < combinations; i++) {
             Map<Character, Boolean> variableValues = getCharacterBooleanMap(i, n, variables);
@@ -103,12 +99,10 @@ public class ReversePolishNotation {
 
     private static Map<Character, Boolean> getCharacterBooleanMap(int i, int n, List<Character> variables) {
         Map<Character, Boolean> variableValues = new HashMap<>();
-        StringBuilder binaryString = new StringBuilder(Integer.toBinaryString(i)); // Переводим счетчик в двоичное представление
-        // Дополняем двоичное представление до длины n нулями слева, если необходимо
+        StringBuilder binaryString = new StringBuilder(Integer.toBinaryString(i));
         while (binaryString.length() < n) {
             binaryString.insert(0, "0");
         }
-        // Устанавливаем значения переменных в соответствии с двоичным представлением счетчика
         for (int j = 0; j < n; j++) {
             char variable = variables.get(j);
             boolean value = binaryString.charAt(j) == '1';
