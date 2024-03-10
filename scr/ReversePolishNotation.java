@@ -25,6 +25,10 @@ public class ReversePolishNotation {
         System.out.println("СДНФ: " + buildSDNF(truthTable));
         System.out.println("СКНФ: " + buildSKNF(truthTable));
         System.out.println("``````````````````````````````````");
+
+        System.out.println("Числовая формула СДНФ: " + numericFormSDNF(truthTable));
+        System.out.println("Числовая формула СКНФ: " + numericFormSKNF(truthTable));
+        System.out.println("``````````````````````````````````");
     }
 
     public static String convertToRPN(String expression) {
@@ -173,5 +177,43 @@ public class ReversePolishNotation {
             }
         }
         return String.join(" & ", terms);
+    }
+
+    public static String numericFormSDNF(Map<Map<Character, Boolean>, Boolean> truthTable) {
+        StringBuilder numericFormula = new StringBuilder("(");
+        boolean firstEntry = true;
+        int index = 0;
+        for (Map.Entry<Map<Character, Boolean>, Boolean> entry : truthTable.entrySet()) {
+            if (entry.getValue()) {
+                if (!firstEntry) {
+                    numericFormula.append(", ");
+                } else {
+                    firstEntry = false;
+                }
+                numericFormula.append(index);
+            }
+            index++;
+        }
+        numericFormula.append(") ∨");
+        return numericFormula.toString();
+    }
+
+    public static String numericFormSKNF(Map<Map<Character, Boolean>, Boolean> truthTable) {
+        StringBuilder numericFormula = new StringBuilder("(");
+        boolean firstEntry = true;
+        int index = 0;
+        for (Map.Entry<Map<Character, Boolean>, Boolean> entry : truthTable.entrySet()) {
+            if (!entry.getValue()) {
+                if (!firstEntry) {
+                    numericFormula.append(", ");
+                } else {
+                    firstEntry = false;
+                }
+                numericFormula.append(index);
+            }
+            index++;
+        }
+        numericFormula.append(") ∧");
+        return numericFormula.toString();
     }
 }
