@@ -1,13 +1,14 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 public class ReversePolishNotation {
     public static void main(String[] args) {
-        String expression2 = "!(A & B) | (C -> D)";
-        String expression = "(A | B) & !C";
+        String expression = "((A - B) ~ (A & A))";
+        String expression2 = "(A | B) & !C";
         String rpn = convertToRPN(expression);
         System.out.println("Обратная польская запись: " + rpn);
         System.out.println("``````````````````````````````````");
@@ -29,6 +30,16 @@ public class ReversePolishNotation {
         System.out.println("Числовая формула СДНФ: " + numericFormSDNF(truthTable));
         System.out.println("Числовая формула СКНФ: " + numericFormSKNF(truthTable));
         System.out.println("``````````````````````````````````");
+
+        // Вывод битовых масок
+        System.out.println("Индексная форма:");
+        List<String> bitMasks = buildIndexForm(truthTable);
+        StringBuilder binaryString = new StringBuilder();
+        for (String bitmask : bitMasks) {
+            binaryString.append(bitmask);
+        }
+        int decimal = Integer.parseInt(binaryString.toString(), 2);
+        System.out.println(binaryString + " ---> " + decimal);
     }
 
     public static String convertToRPN(String expression) {
@@ -75,26 +86,35 @@ public class ReversePolishNotation {
     }
 
     public static Map<Map<Character, Boolean>, Boolean> buildTruthTable(String expression) {
-        Map<Map<Character, Boolean>, Boolean> truthTable = new HashMap<>();
+        Map<Map<Character, Boolean>, Boolean> truthTable = new LinkedHashMap<>(); // LinkedHashMap для сохранения порядка
 
         List<Character> variables = extractVariables(expression);
         int n = variables.size();
         int combinations = 1 << n; // 2 в степени n
 
         for (int i = 0; i < combinations; i++) {
-            Map<Character, Boolean> variableValues = new HashMap<>();
-            for (int j = 0; j < n; j++) {
-                char variable = variables.get(j);
-                boolean value = ((i >> j) & 1) == 1; // Получаем j-тый бит числа i
-                variableValues.put(variable, value);
-            }
+            Map<Character, Boolean> variableValues = getCharacterBooleanMap(i, n, variables);
             boolean result = evaluateExpression(expression, variableValues);
-//            System.out.print(variableValues + " => " + result);
-//            System.out.println();
             truthTable.put(variableValues, result);
         }
 
         return truthTable;
+    }
+
+    private static Map<Character, Boolean> getCharacterBooleanMap(int i, int n, List<Character> variables) {
+        Map<Character, Boolean> variableValues = new HashMap<>();
+        StringBuilder binaryString = new StringBuilder(Integer.toBinaryString(i)); // Переводим счетчик в двоичное представление
+        // Дополняем двоичное представление до длины n нулями слева, если необходимо
+        while (binaryString.length() < n) {
+            binaryString.insert(0, "0");
+        }
+        // Устанавливаем значения переменных в соответствии с двоичным представлением счетчика
+        for (int j = 0; j < n; j++) {
+            char variable = variables.get(j);
+            boolean value = binaryString.charAt(j) == '1';
+            variableValues.put(variable, value);
+        }
+        return variableValues;
     }
 
     public static boolean evaluateExpression(String expression, Map<Character, Boolean> variableValues) {
@@ -215,5 +235,13 @@ public class ReversePolishNotation {
         }
         numericFormula.append(") ∧");
         return numericFormula.toString();
+    }
+
+    public static List<String> buildIndexForm(Map<Map<Character, Boolean>, Boolean> truthTable) {
+        List<String> bitMasks = new ArrayList<>();
+        for (boolean result : truthTable.values()) {
+            bitMasks.add(result ? "1" : "0");
+        }
+        return bitMasks;
     }
 }
