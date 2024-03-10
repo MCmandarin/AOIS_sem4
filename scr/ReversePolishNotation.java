@@ -7,7 +7,7 @@ import java.util.Stack;
 
 public class ReversePolishNotation {
     public static void main(String[] args) {
-        String expression = "((A - B) ~ (A & A))";
+        String expression = "((((P & (!Q)) - R) ~ P) | (P & Q))";
         String expression2 = "(A | B) & !C";
         String rpn = convertToRPN(expression);
         System.out.println("Обратная польская запись: " + rpn);
@@ -153,6 +153,7 @@ public class ReversePolishNotation {
             case '&' -> operand1 & operand2;
             case '|' -> operand1 | operand2;
             case '-' -> !operand1 | operand2;
+            case '~' -> operand1 == operand2;
             default -> false;
         };
     }
