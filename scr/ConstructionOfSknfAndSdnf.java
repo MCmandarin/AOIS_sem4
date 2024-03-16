@@ -1,15 +1,10 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Stack;
+import java.util.*;
 
 public class ConstructionOfSknfAndSdnf {
     public static void main(String[] args) {
         String expression3 = "((P - (Q & R)) ~ ((P & (!Q)) - (!R)))";
         String expression2 = "((((P & (!Q)) - R) ~ P) | (P & Q))";
-        String expression = "(A | B) & !C";
+        String expression = "(!A) - (C | B)";
         String rpn = convertToRPN(expression);
         System.out.println("Обратная польская запись: " + rpn);
         System.out.println("``````````````````````````````````");
@@ -41,28 +36,27 @@ public class ConstructionOfSknfAndSdnf {
 
     public static String convertToRPN(String expression) {
         StringBuilder result = new StringBuilder();
-        Stack<Character> stack = new Stack<>();
+        Deque<Character> queue = new ArrayDeque<>();
 
         for (char ch : expression.toCharArray()) {
             if (Character.isLetterOrDigit(ch)) {
                 result.append(ch);
             } else if (ch == '(') {
-                stack.push(ch);
+                queue.push(ch);
             } else if (ch == ')') {
-                while (!stack.isEmpty() && stack.peek() != '(') {
-                    result.append(stack.pop());
+                while (!queue.isEmpty() && queue.peek() != '(') {
+                    result.append(queue.pop());
                 }
-                stack.pop();
+                queue.pop();
             } else if (isOperator(ch)) {
-                while (!stack.isEmpty() && precedence(ch) <= precedence(stack.peek())) {
-                    result.append(stack.pop());
+                while (!queue.isEmpty() && precedence(ch) <= precedence(queue.peek())) {
+                    result.append(queue.pop());
                 }
-                stack.push(ch);
+                queue.push(ch);
             }
         }
-
-        while (!stack.isEmpty()) {
-            result.append(stack.pop());
+        while (!queue.isEmpty()) {
+            result.append(queue.pop());
         }
 
         return result.toString();
